@@ -52,8 +52,11 @@
   <ItemGroup>
     <Compile Include="Commands\GetWorkflowInstanceDetailsRequest.cs" />
     <Compile Include="Commands\GetWorkflowInstancesForObjectRequest.cs" />
+    <Compile Include="Commands\GetWorkflowInstanceWorkingDataRequest.cs" />
     <Compile Include="Commands\GetWorkflowTemplatesRequest.cs" />
     <Compile Include="Commands\InitiateWorkflowRequest.cs" />
+    <Compile Include="Commands\UpdateWorkingDataRequest.cs" />
+    <Compile Include="Commands\Responses\GetWorkflowInstanceWorkingDataResponse.cs" />
     <Compile Include="Commands\SaveWorkflowTemplateRequest.cs" />
     <Compile Include="Commands\Responses\GetWorkflowInstanceDetailsResponse.cs" />
     <Compile Include="Commands\Responses\GetWorkflowInstancesForObjectResponse.cs" />

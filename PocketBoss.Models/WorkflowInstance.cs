@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace PocketBoss.Models
 {
@@ -41,6 +42,22 @@ namespace PocketBoss.Models
         public string TargetObjectId { get; set; }
         public string TargetObjectType { get; set; }
         public string CreatedBy { get; set; }
+
+        private Dictionary<string, string> _WorkingData = new Dictionary<string, string>();
+        [NotMapped]
+        public Dictionary<string, string> WorkingData
+        {
+            get { return _WorkingData; }
+            set { _WorkingData = value; }
+        }
+
+        [AuditIgnore]
+        [JsonIgnore]
+        public string WorkingDataStorage
+        {
+            get { return JsonConvert.SerializeObject(_WorkingData); }
+            set { _WorkingData = JsonConvert.DeserializeObject<Dictionary<string, string>>(value);}
+        }
 
         [NotMapped]
         [AuditIgnore]

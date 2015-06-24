@@ -387,6 +387,80 @@ namespace PocketBoss.Processor
 
         }
 
+        public void GetWorkflowInstanceWorkingDataRequestHandler(GetWorkflowInstanceWorkingDataRequest message)
+        {
+            using (var dataContext = new DataContext(message.TenantId, message.AuditContext))
+            {
+                try
+                {
+                    var data = dataContext.WorkflowInstances.FirstOrDefault(x => x.Id == message.WorkflowInstanceId && x.TargetObjectId == message.TargetObjectId && x.TargetObjectType == message.TargetObjectType);
+                    if (data != null)
+                    {
+                        var returnVal = new GetWorkflowInstanceWorkingDataResponse()
+                        {
+                            AuditContext = message.AuditContext,
+                            CorrelationId = message.CorrelationId,
+                            TargetObjectId = message.TargetObjectId,
+                            TargetObjectType = message.TargetObjectType,
+                            TenantId = message.TenantId,
+                            WorkflowInstanceId = message.WorkflowInstanceId,
+                            WorkingData = data.WorkingData,
+                        };
+                        _bus.Reply(returnVal, 1);
+                    }
+                    else
+                    {
+                        var returnVal = new GetWorkflowInstanceWorkingDataResponse()
+                        {
+                            AuditContext = message.AuditContext,
+                            CorrelationId = message.CorrelationId,
+                            TargetObjectId = message.TargetObjectId,
+                            TargetObjectType = message.TargetObjectType,
+                            TenantId = message.TenantId,
+                            WorkflowInstanceId = message.WorkflowInstanceId,
+                            WorkingData = null,
+                        };
+                        _bus.Reply(returnVal, 1);
+                    }
+
+                }
+                catch (Exception exp)
+                {
+                    var returnVal = new GetWorkflowInstanceWorkingDataResponse()
+                    {
+                        AuditContext = message.AuditContext,
+                        CorrelationId = message.CorrelationId,
+                        TargetObjectId = message.TargetObjectId,
+                        TargetObjectType = message.TargetObjectType,
+                        TenantId = message.TenantId,
+                        WorkflowInstanceId = message.WorkflowInstanceId,
+                        WorkingData = null,
+                    };
+                    _bus.Reply(returnVal, 0);
+                }
+            }
+        }
+
+        public void UpdateWorkingDataRequestHandler(UpdateWorkingDataRequest message)
+        {
+            using (var dataContext = new DataContext(message.TenantId, message.AuditContext))
+            {
+                try
+                {
+                    var data = dataContext.WorkflowInstances.FirstOrDefault(x => x.Id == message.WorkflowInstanceId && x.TargetObjectId == message.TargetObjectId && x.TargetObjectType == message.TargetObjectType);
+                    if (data != null)
+                    {
+                        data.WorkingData = message.WorkingData;
+                        dataContext.SaveChanges();
+                    }
+                }
+                catch (Exception exp)
+                {
+
+                }
+            }
+        }
+
         private void updateStateAsComplete(WorkflowInstance wf, string auditContext, Guid tenantId, IMessagingService bus)
         {
             var message = new RecordStateAction()
